@@ -74,8 +74,8 @@ def compute_data_choice_2(df):
 app.layout = html.Div(children=[ 
                                 # TASK1: Add title to the dashboard
                                 # Enter your code below. Make sure you have correct formatting.
-                                html.H1('US Domestic Airline Flights Performance',dcc.Dropdown(id='input-type')],
-                                style={'textAlign':'left','color':'#503D36','font-size':0})
+                                html.H1('US Domestic Airline Flights Performance',
+                                style={'textAlign':'left','color':'#503D36','font-size':24})
     
                                 # REVIEW2: Dropdown creation
                                 # Create an outer division 
@@ -84,17 +84,18 @@ app.layout = html.Div(children=[
                                     # Add an division
                                     html.Div([
                                         # Create an division for adding dropdown helper text for report type
-                                         html.H2('Report Type:', style={'margin-right': '2em'}),
+                                         html.Div([
+                                          html.H2('Report Type:', style={'margin-right': '2em'}),
                                             ]
                                         ),
                                         # TASK2: Add a dropdown
                                         # Enter your code below. Make sure you have correct formatting.
-                                        dcc.Dropdown(id='input_type', 
+                                        dcc.Dropdown(id='input-type', 
                                                     options=[
-                                                             {'Yearly Airline Performance Report','value':'OPT1'},
-                                                             {'Yearly Airline Delay Report':'value':'OPT2}
+                                                             {'label':'Yearly Airline Performance Report','value':'OPT1'},
+                                                             {'label':'Yearly Airline Delay Report','value':'OPT2}
                                                              ],
-                                                    placeholder='Select a report type'
+                                                    placeholder='Select a report type',style={'width':'80%','padding':'3px','font-size':'20px','text-align-last':'center'})
 
 
 
@@ -135,6 +136,7 @@ app.layout = html.Div(children=[
                                    html.Div([ ], id='plot5')
                                    ],
                                    style={'display':'flex'}),
+                                ])
 
 # Callback function definition
 # TASK4: Add 5 ouput components
@@ -159,7 +161,7 @@ app.layout = html.Div(children=[
 def get_graph(chart, year, children1, children2, c3, c4, c5):
       
         # Select data
-df =  airline_data[airline_data['Year']==int(year)]
+        df =  airline_data[airline_data['Year']==int(year)]
        
         if chart == 'OPT1':
             # Compute required information for creating graph from the data
@@ -189,7 +191,7 @@ df =  airline_data[airline_data['Year']==int(year)]
             
             # TASK6: Number of flights flying to each state from each reporting airline
             # Enter your code below. Make sure you have correct formatting.
-            tree_fig=px.treemap(tree_data,path=['DestState','Reorting_irline'],
+            tree_fig=px.treemap(tree_data,path=['DestState','Reporting_Airline'],
                     values='Flights',
                     color='Flights',
                     color_continuous_scale='RdBu',
@@ -209,13 +211,13 @@ df =  airline_data[airline_data['Year']==int(year)]
             avg_car, avg_weather, avg_NAS, avg_sec, avg_late = compute_data_choice_2(df)
             
             # Create graph
-carrier_fig = px.line(avg_car, x='Month', y='CarrierDelay', color='Reporting_Airline', title='Average carrrier delay time (minutes) by airline')
-weather_fig = px.line(avg_weather, x='Month', y='WeatherDelay', color='Reporting_Airline', title='Average weather delay time (minutes) by airline')
-nas_fig = px.line(avg_NAS, x='Month', y='NASDelay', color='Reporting_Airline', title='Average NAS delay time (minutes) by airline')
-sec_fig = px.line(avg_sec, x='Month', y='SecurityDelay', color='Reporting_Airline', title='Average security delay time (minutes) by airline')
-late_fig = px.line(avg_late, x='Month', y='LateAircraftDelay', color='Reporting_Airline', title='Average late aircraft delay time (minutes) by airline')
+            carrier_fig = px.line(avg_car, x='Month', y='CarrierDelay', color='Reporting_Airline', title='Average carrrier delay time (minutes) by airline')
+            weather_fig = px.line(avg_weather, x='Month', y='WeatherDelay', color='Reporting_Airline', title='Average weather delay time (minutes) by airline')
+            nas_fig = px.line(avg_NAS, x='Month', y='NASDelay', color='Reporting_Airline', title='Average NAS delay time (minutes) by airline')
+            sec_fig = px.line(avg_sec, x='Month', y='SecurityDelay', color='Reporting_Airline', title='Average security delay time (minutes) by airline')
+            late_fig = px.line(avg_late, x='Month', y='LateAircraftDelay', color='Reporting_Airline', title='Average late aircraft delay time (minutes) by airline')
             
-return[dcc.Graph(figure=carrier_fig), 
+            return[dcc.Graph(figure=carrier_fig), 
                     dcc.Graph(figure=weather_fig),
                     dcc.Graph(figure=nas_fig),
                     dcc.Graph(figure=sec_fig),
@@ -224,5 +226,5 @@ return[dcc.Graph(figure=carrier_fig),
 
 # Run the app
 if __name__ == '__main__':
-    app.Run_server()
+    app.run_server()
 
